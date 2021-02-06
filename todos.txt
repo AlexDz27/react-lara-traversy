@@ -1,0 +1,2 @@
+return index.html, not index.blade.html
+
