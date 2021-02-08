@@ -35,13 +35,15 @@ const App = () => {
   const apiUrl = window.location.origin + '/api';
   const tasksUrl = apiUrl + '/tasks';
 
-  let ts = [];
-  fetch(tasksUrl)
-    .then(response => response.json())
-    .then(data => ts = data)
-    .then(ts => setTasks(ts))
-    .then(() => setAreTasksLoaded(true))
-  ;
+  if (areTasksLoaded === false) {
+    let ts = [];
+    fetch(tasksUrl)
+      .then(response => response.json())
+      .then(data => ts = data)
+      .then(ts => setTasks(ts))
+      .then(() => setAreTasksLoaded(true))
+    ;
+  }
 
   // Restore default tasks
   const restoreTasks = () => {

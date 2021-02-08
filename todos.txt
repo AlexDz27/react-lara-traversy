@@ -1,3 +1,6 @@
 return index.html, not index.blade.html
 
 change text in day to date in mysql
+
+разобраться, что там не так с фетчем: если не проводить проверку на false,
+то постоянно фетчит таски. Походу, надо какой-то хук (?) использовать
