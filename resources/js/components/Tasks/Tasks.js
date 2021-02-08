@@ -1,9 +1,19 @@
 import Task from "./Task/Task";
 
-const Tasks = ({tasks, onDelete, onToggle}) => {
+const Tasks = ({tasks, onDelete, onToggle, loaded}) => {
   const havingTasks = tasks.length > 0;
 
   let template;
+
+  if (loaded === false) {
+    template = (
+      <div>
+        Fetching tasks from server...
+      </div>
+    )
+
+    return template;
+  }
 
   if (havingTasks) {
     template = (

@@ -29,7 +29,19 @@ const App = () => {
   ];
 
   const [showAddTask, setShowAddTask] = useState(true);
-  const [tasks, setTasks] = useState(tasksData);
+  const [tasks, setTasks] = useState([]);
+  const [areTasksLoaded, setAreTasksLoaded] = useState(false);
+
+  const apiUrl = window.location.origin + '/api';
+  const tasksUrl = apiUrl + '/tasks';
+
+  let ts = [];
+  fetch(tasksUrl)
+    .then(response => response.json())
+    .then(data => ts = data)
+    .then(ts => setTasks(ts))
+    .then(() => setAreTasksLoaded(true))
+  ;
 
   // Restore default tasks
   const restoreTasks = () => {
@@ -44,9 +56,12 @@ const App = () => {
     } else {
       id = 1;
     }
+
     const newTask = {id, ...task};
 
     setTasks([newTask, ...tasks]);
+
+    // fetch(apiUrl)
   }
 
   // Delete task
@@ -70,7 +85,7 @@ const App = () => {
           <Route path="/" exact>
             <Header onAdd={() => setShowAddTask(!showAddTask)} isShowingForm={showAddTask} />
             {showAddTask && <AddTask onAdd={addTask} />}
-            <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
+            <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} loaded={areTasksLoaded} />
             <Footer onRestore={restoreTasks} />
           </Route>
 

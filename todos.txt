@@ -1,2 +1,3 @@
 return index.html, not index.blade.html
 
+change text in day to date in mysql
