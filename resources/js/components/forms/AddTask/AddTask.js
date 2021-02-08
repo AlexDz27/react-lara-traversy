@@ -8,11 +8,6 @@ const AddTask = ({onAdd}) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!text) {
-      alert('Please, add a task.');
-      return;
-    }
-
     onAdd({text, day, reminder});
 
     setText('');
@@ -27,6 +22,7 @@ const AddTask = ({onAdd}) => {
         <input
           id="task-text"
           value={text}
+          required={true}
           onChange={(e) => setText(e.target.value)}
           placeholder="Do some great things"
         />
@@ -37,6 +33,7 @@ const AddTask = ({onAdd}) => {
           id="date-time"
           placeholder="Feb 8th at 2:30pm"
           value={day}
+          required={true}
           onChange={(e) => setDay(e.target.value)}
         />
       </div>

@@ -1,12 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Task;
+use App\Http\Controllers\TaskController;
 
-Route::get('/tasks', function () {
-  return Task::orderBy('created_at', 'DESC')->get();
-});
+// TODO: group
 
-Route::post('/tasks/create', function () {
-  dd('create task');
-});
+Route::get('/tasks', [TaskController::class, 'showAll']);
+
+Route::post('/tasks/create', [TaskController::class, 'create']);
+
+Route::delete('/tasks/delete/{id}', [TaskController::class, 'delete']);
+
+Route::patch('/tasks/toggle-reminder/{id}', [TaskController::class, 'toggleReminder']);
+
+Route::post('/tasks/restore-default', [TaskController::class, 'restoreDefault']);
