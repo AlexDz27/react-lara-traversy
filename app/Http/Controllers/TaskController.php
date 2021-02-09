@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Exception;
 
 class TaskController extends Controller
 {
   public function showAll()
   {
-    return Task::orderBy('id', 'DESC')->get();
+    $tasks = Task::orderBy('id', 'DESC')->get();
+    $result = (bool) $tasks;
+
+    return response()->json([
+      'success' => $result,
+      'tasks' => $tasks,
+      'message' => $result ? 'Tasks fetched successfully' : 'Problem fetching tasks'
+    ]);
   }
 
   public function create(Request $request)
@@ -20,7 +28,12 @@ class TaskController extends Controller
     $task->day = $request->day;
     $task->reminder = $request->reminder;
 
-    return $task->save();
+    $result = $task->save();
+
+    return response()->json([
+      'success' => $result,
+      'message' => $result ? 'Task saved successfully' : 'Problem saving task'
+    ]);
   }
 
   public function toggleReminder(Request $request, $id)
@@ -29,18 +42,26 @@ class TaskController extends Controller
 
     $task->reminder = $request->reminder;
 
-    $task->save();
+    $result = $task->save();
+
+    return response()->json([
+      'success' => $result,
+      'message' => $result ? 'Reminder toggled successfully' : 'Problem toggling reminder'
+    ]);
   }
 
   public function delete($id)
   {
-    return Task::destroy($id);
+    $result = (bool) Task::destroy($id);
+
+    return response()->json([
+      'success' => $result,
+      'message' => $result ? 'Task deleted successfully' : 'Problem deleting task'
+    ]);
   }
 
   public function restoreDefault()
   {
-    Task::where('id', '>', 0)->delete();
-
     $tasks = [
       [
         'id' => 1,
@@ -62,6 +83,18 @@ class TaskController extends Controller
       ]
     ];
 
-    Task::insert($tasks);
+    $result = true;
+    try {
+      Task::where('id', '>', 0)->delete();
+      Task::insert($tasks);
+    } catch (Exception $exception) {
+      $result = false;
+    }
+
+
+    return response()->json([
+      'success' => $result,
+      'message' => $result ? 'Default tasks restored successfully' : 'Problem restoring default tasks'
+    ]);
   }
 }
